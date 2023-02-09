@@ -7,20 +7,21 @@ class Currency_Converter:
                           "4. Thailand",
                           "5. China",
                           "6. USA"]
+    
         
-        self.conversion_rate ={"VND" : 23000,
+        self.conversion_rate ={"VND" : 23500,
                                "Won" : 1263,
                                "Yen" : 131,
                                "Bath" : 33.5,
                                "Yuan" : 6.8,
                                "USD" : 1}
         
-        self.countries_currencies = {"Viet Nam" : "VND",
-                                     "South Korea" : "Won",
-                                     "Japan" : "Yen",
-                                     "Thailand" : "Bath",
-                                     "China" : "Yuan",
-                                     "USA" : "USD"}
+        self.countries_currencies = {"1" : "VND",
+                                     "2" : "Won",
+                                     "3" : "Yen",
+                                     "4" : "Bath",
+                                     "5" : "Yuan",
+                                     "6" : "USD"}
         
         
         
@@ -62,7 +63,7 @@ def main():
         convertedAmount = C.convertCountriesCurrency(from_country, to_country, money)
         print("Here is your " + C.printMoney(to_country, convertedAmount))
         yesOrNo = input("Do you want to continue?\n Yes or No\n")
-        if yesOrNo == "No":
+        if yesOrNo == "No" or "no":
             break
         
         
