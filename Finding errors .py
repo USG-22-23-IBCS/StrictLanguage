@@ -52,7 +52,7 @@ def main():
          "Seacrest" : 72,
          "Ryan": 73}  
     greet()
-    print(circleArea(4))
+    print(circleArea(-4))
     studyMore(D)
     meanMedian(D)
 
