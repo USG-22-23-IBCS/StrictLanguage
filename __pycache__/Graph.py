@@ -1,7 +1,7 @@
 from button import*
 import random
 import time
-
+import math
 class Node:
     def __init__(self, x, y, win, name):
         self.center = Point(x, y)
@@ -108,6 +108,21 @@ class Graph:
         neighbor.draw(win)
         N.draw(win)
         N.color("white")
+    def removeNode(self, win):
+        c = Circle(Point(300, 400), 60)
+        center = c.getCenter()
+        x2 = center.getX()
+        y2 = center.getY()
+        c.draw(win)
+        while True:
+            m = win.getMouse()
+            x1 = m.getX()
+            y1 = m.getY()
+            d = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            if d <= 60:
+                print("The point is within the circle")
+            else:
+                print("The point is not within the circle")
     
     def minDegree(self):
         minD = 100
@@ -193,17 +208,19 @@ def main():
                 print("The graph has a cycle")
             else:
                 print("The graph does not have a cycle")
-        if Gen.isClicked(m):
-            print("\n===================================\n")
-            #GRaph made with number of nodes and number of edges
-            G.delete()
+        if Enode != "" and Eedge != "":
             numNode = Enode.getText()
             numEdge = Eedge.getText()
-        if numNode != "" and numEdge != "":
+        if Gen.isClicked(m):
+            print("\n===================================\n")
+            #Graph made with number of nodes and number of edges
+            G.delete()
             G = Graph(int(numNode), int(numEdge), win)
             
         if AddNode.isClicked(m):
             G.addNode(win)
+        #if RemoveNode.isClicked(m):
+            #G.removeNode(win)
             
     win.close()
 
