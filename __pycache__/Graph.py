@@ -77,12 +77,6 @@ class Graph:
             if numN == n:
                 break
 
-        '''def merge(Xpositions, Ypositions):
-     
-            merged_list = [(Xpositions[i], Ypositions[i]) for i in range(0, len(Xpositions))]
-            return merged_list
-             
-        print(merge(Xpositions, Ypositions))'''
 
         edges = 0
         while edges < e:
@@ -139,25 +133,26 @@ class Graph:
             if d <= 30:
                 self.nodes.remove(n)
                 n.undraw()
-        newEdges = []    
-        for edge in self.E:
+                newEdges = []    
+                for edge in self.E:
                     if (edge.p1.x == x1 and edge.p1.y == y1) or (edge.p2.x == x1 and edge.p2.y == y1):
                         edge.undraw()
                         print("removed edge " + str(edge))
                     else:
                         newEdges.append(edge)
-                    self.E = newEdges    
-                    for nb in n.getNeighbors():
-                        print(nb.getName())
-                        nb.removeNeighbor(n)
+                self.E = newEdges    
+                for nb in n.getNeighbors():
+                    print(nb.getName())
+                    nb.removeNeighbor(n)
                         
-                    
-               
+            
+       
 
     def addEdge(self, win):
         prompt = Text(Point(400, 10), "Select first node!")
         prompt.setSize(25)
         prompt.setTextColor("red")
+        prompt.undraw()
         prompt.draw(win)
         firstNode = None
         secondNode = None
@@ -198,14 +193,32 @@ class Graph:
             firstNode.draw(win)
             secondNode.undraw()
             secondNode.draw(win)
+        
+      
+    def coloringNode(self, colors):
 
-    '''def coloringNode(self, colorMap):
-        colorMap = ["purple", "pink", "yellow", "blue"]
-        for n in self.nodes:
-            n.color(colorMap[i])
-            if n '''
-            
-            
+        colors = ["red", "yellow", "purple", "blue", "orange"]
+
+        count = 0
+
+
+        for c in colors:
+            for n in self.nodes:
+                n.color(c)
+        
+
+        
+                
+            if n == len(colors):
+                #n.color(colors[0])
+                count = count + 1
+                
+            else:
+                n.color(colors[1])
+                
+
+
+        
             
     def minDegree(self):
         minD = 100
@@ -258,6 +271,14 @@ class Graph:
             if self.traverseGraph(node, current, visited):
                 return True
         return False
+
+
+  
+            
+        
+                
+                
+            
 
     
         
@@ -316,6 +337,8 @@ def main():
 
         if Coloring.isClicked(m):
             G.coloringNode(win)
+           
+                
                 
     win.close()
 
