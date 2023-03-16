@@ -27,6 +27,9 @@ class Node:
     def addNeighbor(self, n):
         self.neighbors.append(n)
 
+    def removeNeighbor(self, n):
+        self.neighbors.remove(n)
+
     def getCenter(self):
         return self.center
 
@@ -35,6 +38,7 @@ class Node:
 
     def color(self, c):
         self.C.setFill(c)
+
 
     def printNeighbors(self):
         l = []
@@ -49,7 +53,9 @@ class Graph:
         self.E = []
         Xpositions = []
         Ypositions = []
+        XYpositions = []
         self.names = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
+        self.colors = ["red", "yellow", "purple", "blue", "orange"]
         numN = 0
         while True:
             x = random.randint(140, 740)
@@ -71,6 +77,13 @@ class Graph:
             if numN == n:
                 break
 
+        '''def merge(Xpositions, Ypositions):
+     
+            merged_list = [(Xpositions[i], Ypositions[i]) for i in range(0, len(Xpositions))]
+            return merged_list
+             
+        print(merge(Xpositions, Ypositions))'''
+
         edges = 0
         while edges < e:
             n1 = random.choice(self.nodes)
@@ -89,7 +102,11 @@ class Graph:
         for node in self.nodes:
             node.draw(win)
             node.color("white")
-            #print(str(node.calcDegree()) + " : " + node.getName())
+            #print(str(node.calcDegree()) + " : " + node.getName(
+            
+        
+
+        
             
     def addNode(self, win):
         m = win.getMouse()
@@ -108,22 +125,88 @@ class Graph:
         neighbor.draw(win)
         N.draw(win)
         N.color("white")
+
     def removeNode(self, win):
-        c = Circle(Point(300, 400), 60)
-        center = c.getCenter()
-        x2 = center.getX()
-        y2 = center.getY()
-        c.draw(win)
-        while True:
-            m = win.getMouse()
-            x1 = m.getX()
-            y1 = m.getY()
-            d = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-            if d <= 60:
-                print("The point is within the circle")
-            else:
-                print("The point is not within the circle")
+        m = win.getMouse()
+        x = m.getX()
+        y = m.getY()
+        
+        for n in self.nodes:
+            center = n.getCenter()
+            x1 = center.getX()
+            y1 = center.getY()
+            d = math.sqrt((x - x1)**2 + (y - y1)**2)
+            if d <= 30:
+                self.nodes.remove(n)
+                n.undraw()
+        newEdges = []    
+        for edge in self.E:
+                    if (edge.p1.x == x1 and edge.p1.y == y1) or (edge.p2.x == x1 and edge.p2.y == y1):
+                        edge.undraw()
+                        print("removed edge " + str(edge))
+                    else:
+                        newEdges.append(edge)
+                    self.E = newEdges    
+                    for nb in n.getNeighbors():
+                        print(nb.getName())
+                        nb.removeNeighbor(n)
+                        
+                    
+               
+
+    def addEdge(self, win):
+        prompt = Text(Point(400, 10), "Select first node!")
+        prompt.setSize(25)
+        prompt.setTextColor("red")
+        prompt.draw(win)
+        firstNode = None
+        secondNode = None
+
+        m = win.getMouse()
+        x = m.getX()
+        y = m.getY()
+        for n in self.nodes:
+            center = n.getCenter()
+            x1 = center.getX()
+            y1 = center.getY()
+            if math.sqrt((x - x1)**2 + (y - y1)**2) <= 30:
+                firstNode = n
+        
+        prompt.undraw()
+        prompt = Text(Point(400, 10), "Select second node!")
+        prompt.setSize(25)
+        prompt.setTextColor("red")
+        prompt.draw(win)
+        m = win.getMouse()
+        x = m.getX()
+        y = m.getY()
+        for n in self.nodes:
+            center = n.getCenter()
+            x1 = center.getX()
+            y1 = center.getY()
+            if math.sqrt((x - x1)**2 + (y - y1)**2) <= 30:
+                secondNode = n
     
+
+        if secondNode not in firstNode.getNeighbors() and firstNode not in secondNode.getNeighbors():
+            firstNode.addNeighbor(secondNode)
+            secondNode.addNeighbor(firstNode)
+            L = Line(firstNode.getCenter(), secondNode.getCenter())
+            L.draw(win)
+            self.E.append(L)
+            firstNode.undraw()
+            firstNode.draw(win)
+            secondNode.undraw()
+            secondNode.draw(win)
+
+    '''def coloringNode(self, colorMap):
+        colorMap = ["purple", "pink", "yellow", "blue"]
+        for n in self.nodes:
+            n.color(colorMap[i])
+            if n '''
+            
+            
+            
     def minDegree(self):
         minD = 100
         for node in self.nodes:
@@ -175,16 +258,20 @@ class Graph:
             if self.traverseGraph(node, current, visited):
                 return True
         return False
-                
+
+    
         
         
 def main():
 
-    win = GraphWin("Graph Example", 800, 600)
+    win = GraphWin("Graph Example", 800, 700)
     #buttons
-    Q = Button(win, Point(20, 530), Point(100, 590), "tomato", "QUIT!")
-    Gen = Button(win, Point(20, 430), Point(100, 490), "cyan", "Generate!")
-    AddNode = Button(win, Point(20, 330), Point(100, 390), "beige", "Add Node")
+    Coloring = Button(win, Point(150, 530), Point(230, 590), "beige", "Coloring")
+    AddEdge = Button(win, Point(150, 630), Point(230, 690), "beige", "Add Egde")
+    Q = Button(win, Point(20, 630), Point(100, 690), "tomato", "QUIT!")
+    Gen = Button(win, Point(20, 530), Point(100, 590), "cyan", "Generate!")
+    AddNode = Button(win, Point(20, 430), Point(100, 490), "beige", "Add Node")
+    RemoveNode = Button(win, Point(20, 330), Point(100, 390), "beige", "Remove Node")
     Degrees = Button(win, Point(20, 230), Point(100, 290), "beige", "Calc Degrees")
     Cycle = Button(win, Point(20, 130), Point(100, 190), "beige", "Has Cycle?")
     Enode = Entry(Point(50, 30), 10)
@@ -196,6 +283,7 @@ def main():
     Tedge = Text(Point(50, 80), "Number of edges: ")
     Tedge.draw(win)
     G = Graph(1, 0, win)
+
     while True:
         m = win.getMouse()
         if Q.isClicked(m):
@@ -219,9 +307,16 @@ def main():
             
         if AddNode.isClicked(m):
             G.addNode(win)
-        #if RemoveNode.isClicked(m):
-            #G.removeNode(win)
-            
+
+        if RemoveNode.isClicked(m):
+            G.removeNode(win)
+
+        if AddEdge.isClicked(m):
+            G.addEdge(win)
+
+        if Coloring.isClicked(m):
+            G.coloringNode(win)
+                
     win.close()
 
 if __name__ == "__main__":
