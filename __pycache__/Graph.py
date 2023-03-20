@@ -55,7 +55,7 @@ class Graph:
         Ypositions = []
         XYpositions = []
         self.names = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
-        self.colors = ["red", "yellow", "purple", "blue", "orange"]
+        self.colors = ["red", "yellow", "purple", "blue"]
         numN = 0
         while True:
             x = random.randint(140, 740)
@@ -195,28 +195,25 @@ class Graph:
             secondNode.draw(win)
         
       
+  
     def coloringNode(self, colors):
 
-        colors = ["red", "yellow", "purple", "blue", "orange"]
-
-        count = 0
-
-
-        for c in colors:
-            for n in self.nodes:
-                n.color(c)
         
-
-        
-                
-            if n == len(colors):
-                #n.color(colors[0])
-                count = count + 1
-                
-            else:
-                n.color(colors[1])
-                
-
+        colorMap = {}
+        for node in self.nodes:
+            # colors of all neighbors
+            neighborsColors = []
+            for nb in node.getNeighbors():
+                # If neigbor already had a color, add it to the list
+                if nb in colorMap:
+                    neighborsColors.append(colorMap[nb])
+            
+            for color in self.colors:
+                # If a color is not used by any neigbors, use it and exit the loop
+                if color not in neighborsColors:
+                    node.color(color)
+                    colorMap[node] = color
+                    break
 
         
             
@@ -288,7 +285,7 @@ def main():
     win = GraphWin("Graph Example", 800, 700)
     #buttons
     Coloring = Button(win, Point(150, 530), Point(230, 590), "beige", "Coloring")
-    AddEdge = Button(win, Point(150, 630), Point(230, 690), "beige", "Add Egde")
+    AddEdge = Button(win, Point(150, 630), Point(230, 690), "beige", "Add Edge")
     Q = Button(win, Point(20, 630), Point(100, 690), "tomato", "QUIT!")
     Gen = Button(win, Point(20, 530), Point(100, 590), "cyan", "Generate!")
     AddNode = Button(win, Point(20, 430), Point(100, 490), "beige", "Add Node")
